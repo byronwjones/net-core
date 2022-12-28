@@ -1,7 +1,21 @@
-﻿namespace BWJ.Core
+﻿using System;
+
+namespace BWJ.Core
 {
     public static class TypeExtensions
     {
+        /// <summary>
+        /// Determines whether or not a given type is anonymous.
+        /// Note that this method is heuristic.  While this method can be used to definitively determine that a type is not anonymous,
+        /// practically negligible edge cases where this method could return a false negative do exist.
+        /// </summary>
+        /// <param name="obj">
+        /// Type to evaluate
+        /// </param>
+        /// <returns>True if this type is not anonymous</returns>
+        public static bool IsNotAnonymous(this Type type)
+            => (type.Name.StartsWith("<>") && type.Name.Contains("AnonymousType")) == false;
+
         /// <summary>
         /// 
         /// </summary>
