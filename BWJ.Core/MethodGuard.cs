@@ -1,28 +1,51 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
 
 namespace BWJ.Core
 {
+    /// <summary>
+    /// A suite of methods intended for method argument validation
+    /// </summary>
     public static class MethodGuard
     {
+        /// <summary>
+        /// Asserts that all the members of the given object are not null
+        /// </summary>
+        /// <param name="args">An anonymous type object containing nullable arguments provided to the method invoked</param>
         public static void NoNull(object args)
         {
             NoNull(nameof(args), args);
+            var type = args.GetType();
+            if (type.IsNotAnonymous() == false)
+            {
+                throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
+            }
 
-            var props = args.GetType().GetProperties();
+            var props = type.GetProperties();
             foreach(var p in props)
             {
                 NoNull(p.Name, p.GetValue(args));
             }
         }
 
-        public static void NoNull(string parameterName, object? parameter)
+        /// <summary>
+        /// Asserts that an argument provided to the method invoked is not null
+        /// </summary>
+        /// <param name="parameterName">Name of the method parameter</param>
+        /// <param name="arg">The argument provided to the given parameter</param>
+        /// <exception cref="ArgumentException">If parameter name is null or empty string</exception>
+        /// <exception cref="ArgumentNullException">If argument is null</exception>
+        public static void NoNull(string parameterName, object? arg)
         {
             if(string.IsNullOrWhiteSpace(parameterName))
             {
                 throw new ArgumentException(nameof(parameterName));
             }
 
-            if(parameter is null)
+            if(arg is null)
             {
                 throw new ArgumentNullException(parameterName);
             }
@@ -31,8 +54,13 @@ namespace BWJ.Core
         public static void NoEmptyString(object args)
         {
             NoNull(nameof(args), args);
+            var type = args.GetType();
+            if (type.IsNotAnonymous() == false)
+            {
+                throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
+            }
 
-            var props = args.GetType().GetProperties();
+            var props = type.GetProperties();
             foreach (var p in props)
             {
                 var value = p.GetValue(args);
@@ -62,8 +90,13 @@ namespace BWJ.Core
         public static void NoEmptyCollection(object args)
         {
             NoNull(nameof(args), args);
+            var type = args.GetType();
+            if (type.IsNotAnonymous() == false)
+            {
+                throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
+            }
 
-            var props = args.GetType().GetProperties();
+            var props = type.GetProperties();
             foreach (var p in props)
             {
                 var value = p.GetValue(args);

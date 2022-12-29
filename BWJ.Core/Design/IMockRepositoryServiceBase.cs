@@ -1,4 +1,8 @@
-﻿namespace BWJ.Core.Design
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace BWJ.Core.Design
 {
     public interface IMockRepositoryServiceBase<T>
     {
