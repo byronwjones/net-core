@@ -6,10 +6,11 @@
     <Nullable>enable</Nullable>
     <Description>General .NET application development utilities</Description>
     <Copyright>Byron W Jones</Copyright>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Version>1.6.0</Version>
+    <Authors>Byron W Jones</Authors>
   </PropertyGroup>
 
 </Project>

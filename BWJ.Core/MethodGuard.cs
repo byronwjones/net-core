@@ -19,7 +19,7 @@ namespace BWJ.Core
         {
             NoNull(nameof(args), args);
             var type = args.GetType();
-            if (type.IsNotAnonymous() == false)
+            if (type.IsNotAnonymous())
             {
                 throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
             }
@@ -55,7 +55,7 @@ namespace BWJ.Core
         {
             NoNull(nameof(args), args);
             var type = args.GetType();
-            if (type.IsNotAnonymous() == false)
+            if (type.IsNotAnonymous())
             {
                 throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
             }
@@ -91,7 +91,7 @@ namespace BWJ.Core
         {
             NoNull(nameof(args), args);
             var type = args.GetType();
-            if (type.IsNotAnonymous() == false)
+            if (type.IsNotAnonymous())
             {
                 throw new ArgumentException("Argument provided must be an anonymous type", nameof(args));
             }
