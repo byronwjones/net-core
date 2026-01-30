@@ -17,27 +17,27 @@ namespace BWJ.Core.Cryptography
             _settingsProvider = settingsProvider;
         }
 
-        public async Task<string> EncryptText(string text, string? IV = default)
+        public async Task<string> EncryptText(string text, string? keyName = default, string? IV = default)
         {
             byte[] result = Encoding.UTF8.GetBytes(text);
-            result = await EncryptData(result, IV);
+            result = await EncryptData(result, keyName, IV);
 
             return Convert.ToBase64String(result);
         }
 
-        public async Task<string> DecryptText(string text, string? IV = default)
+        public async Task<string> DecryptText(string text, string? keyName = default, string? IV = default)
         {
             byte[] binaryData = Convert.FromBase64String(text);
-            binaryData = await DecryptData(binaryData, IV);
+            binaryData = await DecryptData(binaryData, keyName, IV);
 
             return Encoding.UTF8.GetString(binaryData);
         }
 
-        public async Task<byte[]> EncryptData(byte[] data, string? IV = default)
+        public async Task<byte[]> EncryptData(byte[] data, string? keyName = default, string? IV = default)
         {
             using (Aes aes = Aes.Create())
             {
-                aes.Key = await _settingsProvider.GetEncryptionKey();
+                aes.Key = await _settingsProvider.GetEncryptionKey(keyName);
                 aes.IV = await _settingsProvider.GetInitializationVector(IV);
                 aes.Padding = PaddingMode.PKCS7;
 
@@ -54,11 +54,11 @@ namespace BWJ.Core.Cryptography
             }
         }
 
-        public async Task<byte[]> DecryptData(byte[] data, string? IV = default)
+        public async Task<byte[]> DecryptData(byte[] data, string? keyName = default, string? IV = default)
         {
             using (Aes aes = Aes.Create())
             {
-                aes.Key = await _settingsProvider.GetEncryptionKey();
+                aes.Key = await _settingsProvider.GetEncryptionKey(keyName);
                 aes.IV = await _settingsProvider.GetInitializationVector(IV);
                 aes.Padding = PaddingMode.PKCS7;
 

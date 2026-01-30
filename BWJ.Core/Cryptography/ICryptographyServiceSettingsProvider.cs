@@ -5,6 +5,6 @@ namespace BWJ.Core.Cryptography
     public interface ICryptographyServiceSettingsProvider
     {
         Task<byte[]> GetInitializationVector(string? vector);
-        Task<byte[]> GetEncryptionKey();
+        Task<byte[]> GetEncryptionKey(string? keyName = null);
     }
 }
