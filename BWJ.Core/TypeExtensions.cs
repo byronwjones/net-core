@@ -54,5 +54,68 @@ namespace BWJ.Core
             }
             return false;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the object's type would map to a type that would be considered
+        /// primitive in JavaScript.  This includes all C# primitive types, string, enum, or decimal.
+        /// </summary>
+        /// <returns>True if the object maps to a JavaScript primitive type; otherwise, false.</returns>
+        public static bool IsJavaScriptPrimitive(this Type t)
+        {
+            t = UnwrapPrimitive(t);
+
+            return t.IsPrimitive || t == typeof(string) || t == typeof(decimal);
+        }
+
+        public static bool IsNullablePrimitive(this Type t)
+        {
+            var nullable = t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+            if(nullable == false && t != typeof(string)) { return false; }
+
+            return t.IsJavaScriptPrimitive();
+        }
+
+        public static bool IsNumber(this Type t)
+        {
+            t = UnwrapPrimitive(t);
+
+            // boolean is the only primitive that is not a number
+            if(t == typeof(bool)) { return false; }
+
+            return t.IsPrimitive || t == typeof(decimal);
+        }
+
+        public static bool IsUnsignedNumber(this Type t)
+        {
+            if(t.IsNumber())
+            {
+                return t == typeof(byte)
+                    || t == typeof(uint)
+                    || t == typeof(ulong)
+                    || t == typeof(ushort)
+                    || t == typeof(UIntPtr)
+                    || t == typeof(char);
+            }
+
+            return false;
+        }
+
+        public static bool IsSignedNumber(this Type t)
+            => t.IsNumber() && t.IsUnsignedNumber() == false;
+
+        private static Type UnwrapPrimitive(Type t)
+        {
+            // nullables wrapping primitives are primitives too
+            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                t = t.GetGenericArguments()[0];
+            }
+            if(t.IsEnum)
+            {
+                t = Enum.GetUnderlyingType(t);
+            }
+
+            return t;
+        }
     }
 }
